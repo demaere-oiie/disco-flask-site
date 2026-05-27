@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import Flask, request
+from os import environ
 
 ################################################################################
 
@@ -43,7 +44,7 @@ app = Flask(__name__)
 
 @app.route("/dt")
 def date_time():
-    return f"hello from torch disco!!! the datetime is {datetime.now()}"
+    return f"hello from disco {environ['DISCO_DEPLOYMENT_NUMBER']}!!! the datetime is {datetime.now()}"
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
