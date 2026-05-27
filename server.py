@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from os import environ
 
 ################################################################################
@@ -81,7 +81,7 @@ def upload_oon_file():
             flash('No selected file')
             return redirect(request.url)
         file.save("/tmp/foo")
-        return "<pre>"+classify_oon("/tmp/foo")+"</pre>"
+        return "<pre>"+classify_oon("/tmp/foo")+"</pre><img src='/uploads/foo'>"
     return '''
     <!doctype html>
     <title>Upload new OON</title>
@@ -106,7 +106,7 @@ def upload_rps_file():
             flash('No selected file')
             return redirect(request.url)
         file.save("/tmp/foo")
-        return "<pre>"+classify_rps("/tmp/foo")+"</pre>"
+        return "<pre>"+classify_rps("/tmp/foo")+"</pre><img src='/uploads/foo'>"
     return '''
     <!doctype html>
     <title>Upload new RPS</title>
@@ -116,6 +116,10 @@ def upload_rps_file():
       <input type=submit value=Upload>
     </form>
     '''
+
+@app.route('/uploads/<name>')
+def download_file(name):
+    return send_from_directory('/tmp/',name)
 
 @app.route('/')
 def homepage():
