@@ -140,4 +140,7 @@ def test_js():
     return send_from_directory('/tmp/','test.js')
 
 if __name__=="__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True, ssl_context="adhoc")
+    if 'DISCO_DEPLOYMENT_NUMBER' not in environ:
+        app.run(host="0.0.0.0", port=8080, debug=True, ssl_context="adhoc")
+    else:
+        app.run(host="0.0.0.0", port=8080, debug=True)
