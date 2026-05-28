@@ -131,5 +131,13 @@ def homepage():
     </ul>
     '''
 
+@app.route('/test.htm')
+def test_htm():
+    return send_from_directory('/tmp/','test.htm')
+
+@app.route('/test.js')
+def test_js():
+    return send_from_directory('/tmp/','test.js')
+
 if __name__=="__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True, ssl_context="adhoc")
