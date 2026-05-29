@@ -1,7 +1,7 @@
 navigator = window.navigator;
 
 navigator.mediaDevices.getUserMedia({
-  video: { width: 320, height: 240, resizeMode: "crop-and-scale" },
+  video: true,
   audio: false
 }).then((stream) => {
     video = document.querySelector('video');
@@ -13,12 +13,12 @@ navigator.mediaDevices.getUserMedia({
     button.addEventListener('click', (event) => {
 
     navigator.mediaDevices
-      .getUserMedia({ video:  { width: 320, height: 240, resizeMode: "crop-and-scale" } })
+      .getUserMedia({ video: true })
       .then((mediaStream) => {
         const track = mediaStream.getVideoTracks()[0];
         imageCapture = new ImageCapture(track);
         imageCapture
-          .takePhoto({ imageHeight: 240, imageWidth: 320 })
+          .takePhoto()
           .then((blob) => {
             console.log(blob);
             img = document.querySelector('img');
