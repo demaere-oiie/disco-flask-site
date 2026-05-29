@@ -7,5 +7,8 @@ RUN pip install -r requirements.txt
 
 ADD . /code
 
+ADD test.htm /tmp/test.htm
+ADD test.js /tmp/test.js
+
 CMD ["python", "server.py"]
 
