@@ -1,40 +1,35 @@
-navigator = window.navigator;
+async function main() {
+    navigator = window.navigator;
 
-navigator.mediaDevices.getUserMedia({
-  video: true,
-  audio: false
-}).then((stream) => {
-    video = document.querySelector('video');
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: false
+    });
+
+    const video = document.querySelector('video');
     video.srcObject = stream;
     video.play();
 
-    button = document.querySelector('button');
-    console.log(button);
-    button.addEventListener('click', (event) => {
+    const button = document.querySelector('button');
+    button.addEventListener('click', async (event) => {
 
         const track = stream.getVideoTracks()[0];
-        imageCapture = new ImageCapture(track);
-        imageCapture
-          .takePhoto()
-          .then((blob) => {
-            console.log(blob);
-            img = document.querySelector('img');
-            img.src = URL.createObjectURL(blob);
+        const imageCapture = new ImageCapture(track);
+        const blob = await imageCapture.takePhoto();
 
-            const formData = new FormData();
-            formData.append('file',blob,'snapshot.jpeg');
+        const img = document.querySelector('img');
+        img.src = URL.createObjectURL(blob);
 
-            fetch('/rps', {
+        const formData = new FormData();
+        formData.append('file',blob,'snapshot.jpeg');
+
+        const response = await fetch('/rps', {
                 method: 'POST',
                 body: formData
-            }).then((response) => {
-                response.text()
-                .then((foo) =>
-                    alert(foo));
-            })
-            .catch((error) => console.error(error));
         });
-
+        const foo = await response.text();
+        alert(foo);
     });
-})
-.catch((error) => console.error(error));
+}
+
+main();
