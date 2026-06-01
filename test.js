@@ -20,6 +20,19 @@ navigator.mediaDevices.getUserMedia({
             console.log(blob);
             img = document.querySelector('img');
             img.src = URL.createObjectURL(blob);
+
+            const formData = new FormData();
+            formData.append('file',blob,'snapshot.jpeg');
+
+            fetch('/rps', {
+                method: 'POST',
+                body: formData
+            }).then((response) => {
+                response.text()
+                .then((foo) =>
+                    alert(foo));
+            })
+            .catch((error) => console.error(error));
         });
 
     });
