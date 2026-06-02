@@ -128,6 +128,7 @@ def homepage():
     <li>current <a href="/dt">datetime</a></li>
     <li>Upload new <a href="/oon">Oct or Not</a> Image</li>
     <li>Upload new <a href="/rps">Rock-Paper-Scissors</a> play</li>
+    <li>Webcam <a href="/test.htm">snaps</a></li>
     </ul>
     '''
 
