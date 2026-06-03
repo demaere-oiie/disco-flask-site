@@ -41,7 +41,14 @@ async function main() {
         });
         const foo = await response.text();
 
-        pre.innerHTML = foo[5];
+        tostr = {
+        "R": "Rock",
+        "P": "Paper",
+        "S": "Scissors",
+        "D": "???",
+        };
+
+        pre.innerHTML = tostr[foo[5]];
         }, 4000);
     });
 }
