@@ -23,12 +23,12 @@ async function main() {
         const formData = new FormData();
         formData.append('file',blob,'snapshot.jpeg');
 
-        const response = await fetch('/rps', {
+        const response = await fetch('/rpsd', {
                 method: 'POST',
                 body: formData
         });
         const foo = await response.text();
-        alert(foo);
+        alert(foo[5]);
     });
 }
 
