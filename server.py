@@ -59,6 +59,32 @@ def classify_oon(image_path):
     s += "</pre>"
     return s
 
+def classify_rpsd(image_path):
+    image = Image.open(image_path)
+    classes = ["a photo of a fist",
+               "a photo of a flat hand",
+               "a photo of a victory sign",
+               "a photo of a thing"]
+
+    inputs = processor(text=classes, images=image, return_tensors="pt",
+                       padding=True).to(device)
+
+    with torch.no_grad():
+        outputs = model(**inputs)
+
+        # Calculate probabilities (logits)
+        logits_per_image = outputs.logits_per_image
+        probs = logits_per_image.softmax(dim=-1)
+
+    r, p, s, d = probs[0]
+    if d >= 0.05: cl = "D"
+    elif r >= 0.5: cl = "R"
+    elif s >= 0.5: cl = "S"
+    elif p >= 0.5 and s <= 0.35: cl = "P"
+    else: cl = "S"
+
+    return f"{cl} {image_path} {r:.2f}:{p:.2f}:{s:.2f}:{d:.2f}"
+
 ################################################################################
 
 app = Flask(__name__)
@@ -117,6 +143,31 @@ def upload_rps_file():
     </form>
     '''
 
+@app.route('/rpsd', methods=['GET', 'POST'])
+def upload_rpsd_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        file.save("/tmp/foo")
+        return "<pre>"+classify_rpsd("/tmp/foo")+"</pre><img src='/uploads/foo'>"
+    return '''
+    <!doctype html>
+    <title>Upload new RPSD</title>
+    <h1>Upload new Rock-Paper-Scissors-Default image</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
 @app.route('/uploads/<name>')
 def download_file(name):
     return send_from_directory('/tmp/',name)
@@ -128,6 +179,7 @@ def homepage():
     <li>current <a href="/dt">datetime</a></li>
     <li>Upload new <a href="/oon">Oct or Not</a> Image</li>
     <li>Upload new <a href="/rps">Rock-Paper-Scissors</a> play</li>
+    <li>Upload new <a href="/rpsd">Rock-Paper-Scissors-Default</a> image</li>
     <li>Webcam <a href="/test.htm">snaps</a></li>
     </ul>
     '''
