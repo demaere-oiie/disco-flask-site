@@ -13,12 +13,24 @@ async function main() {
     const button = document.querySelector('button');
     button.addEventListener('click', async (event) => {
 
+        setTimeout(() => {
+        const pre = document.querySelector('pre');
+        pre.innerHTML = "3...";
+        }, 1000);
+        setTimeout(() => {
+        const pre = document.querySelector('pre');
+        pre.innerHTML = "2...";
+        }, 2000);
+        setTimeout(() => {
+        const pre = document.querySelector('pre');
+        pre.innerHTML = "1...";
+        }, 3000);
+        setTimeout(async () => {
+        const pre = document.querySelector('pre');
+        pre.innerHTML = "shoot";
         const track = stream.getVideoTracks()[0];
         const imageCapture = new ImageCapture(track);
         const blob = await imageCapture.takePhoto();
-
-        const img = document.querySelector('img');
-        img.src = URL.createObjectURL(blob);
 
         const formData = new FormData();
         formData.append('file',blob,'snapshot.jpeg');
@@ -28,7 +40,9 @@ async function main() {
                 body: formData
         });
         const foo = await response.text();
-        alert(foo[5]);
+
+        pre.innerHTML = foo[5];
+        }, 4000);
     });
 }
 
