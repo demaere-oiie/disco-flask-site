@@ -28,9 +28,22 @@ async function main() {
         setTimeout(async () => {
         const pre = document.querySelector('pre');
         pre.innerHTML = "shoot";
-        const track = stream.getVideoTracks()[0];
-        const imageCapture = new ImageCapture(track);
-        const blob = await imageCapture.takePhoto();
+
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        function getCanvasBlob(mycanvas) {
+          return new Promise(function(resolve, reject) {
+            mycanvas.toBlob((blob) => {
+              resolve(blob)
+            })
+          })
+        }
+        blob = await getCanvasBlob(canvas, 'image/jpeg');
 
         const formData = new FormData();
         formData.append('file',blob,'snapshot.jpeg');
