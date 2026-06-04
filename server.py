@@ -81,7 +81,7 @@ def classify_rpsd(image_path):
     elif r >= 0.5: cl = "R"
     elif s >= 0.5: cl = "S"
     elif p >= 0.5 and s <= 0.35: cl = "P"
-    else: cl = "S"
+    else: cl = "D"
 
     return f"{cl} {image_path} {r:.2f}:{p:.2f}:{s:.2f}:{d:.2f}"
 
