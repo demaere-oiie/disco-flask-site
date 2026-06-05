@@ -20,10 +20,10 @@ model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 # STEP 2: Create an HandLandmarker object.
-base_options = python.BaseOptions(model_asset_path='hand_landmarker.task')
-options = vision.HandLandmarkerOptions(base_options=base_options,
-                                       num_hands=2)
-detector = vision.HandLandmarker.create_from_options(options)
+#base_options = python.BaseOptions(model_asset_path='hand_landmarker.task')
+#options = vision.HandLandmarkerOptions(base_options=base_options,
+#                                       num_hands=2)
+#detector = vision.HandLandmarker.create_from_options(options)
 
 def classify_rps(image_path):
     image = Image.open(image_path)
