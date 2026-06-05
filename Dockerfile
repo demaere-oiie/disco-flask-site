@@ -4,6 +4,7 @@ FROM python:3.12.1
 WORKDIR /code
 ADD ./requirements.txt /code/requirements.txt
 RUN pip install -r requirements.txt
+RUN wget -q https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task
 
 ADD . /code
 

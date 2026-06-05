@@ -4,6 +4,11 @@ from os import environ
 
 ################################################################################
 
+import cv2
+import mediapipe as mp
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+import numpy as np
 import torch
 from pathlib import Path
 from PIL import Image
@@ -13,6 +18,12 @@ from transformers import CLIPProcessor, CLIPModel
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+
+# STEP 2: Create an HandLandmarker object.
+base_options = python.BaseOptions(model_asset_path='hand_landmarker.task')
+options = vision.HandLandmarkerOptions(base_options=base_options,
+                                       num_hands=2)
+detector = vision.HandLandmarker.create_from_options(options)
 
 def classify_rps(image_path):
     image = Image.open(image_path)
