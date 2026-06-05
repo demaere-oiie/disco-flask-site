@@ -61,7 +61,8 @@ async function main() {
         "D": "???",
         };
 
-        pre.innerHTML = tostr[foo[5]];
+        pre.innerHTML = foo;
+        console.log(foo);
         }, 4000);
     });
 }

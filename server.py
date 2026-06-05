@@ -71,6 +71,40 @@ def classify_oon(image_path):
     return s
 
 def classify_rpsd(image_path):
+  # STEP 3: Load the input image.
+  image = mp.Image.create_from_file(str(image_path))
+
+  # STEP 4: Detect hand landmarks from the input image.
+  detection_result = detector.detect(image)
+
+  if not detection_result.hand_landmarks:
+    return classify_rpsd2(image_path)
+
+  mx,my = 1,1
+  xx,xy = 0,0
+  for l in detection_result.hand_landmarks[0]:
+    if l.x < mx: mx=l.x
+    if l.y < my: my=l.y
+    if l.x > xx: xx=l.x
+    if l.y > xy: xy=l.y
+
+  sm, sx = (.8,1.2)
+  mx = max(int(mx*sm*image.width),0)
+  my = max(int(my*sm*image.height),0)
+  xx = min(int(xx*sx*image.width),image.width)
+  xy = min(int(xy*sx*image.height),image.height)
+
+  if (image.width/(xx-mx))>2 or  (image.height/(xy-my))>2:
+
+      image = cv2.imread(image_path)
+      cropped = image[my:xy, mx:xx]
+      cv2.imwrite('/tmp/crop.png',cropped)
+      return classify_rpsd2('/tmp/crop.png')
+
+  else:
+      return classify_rpsd2(image_path)
+
+def classify_rpsd2(image_path):
     image = Image.open(image_path)
     classes = ["a photo of a fist",
                "a photo of a flat hand",
@@ -168,7 +202,7 @@ def upload_rpsd_file():
             flash('No selected file')
             return redirect(request.url)
         file.save("/tmp/foo")
-        return "<pre>"+classify_rpsd("/tmp/foo")+"</pre><img src='/uploads/foo'>"
+        return "<pre>"+classify_rpsd("/tmp/foo")+"</pre><img src='/uploads/foo'><img src='/uploads/crop.png'>"
     return '''
     <!doctype html>
     <title>Upload new RPSD</title>
