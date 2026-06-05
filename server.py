@@ -5,9 +5,9 @@ from os import environ
 ################################################################################
 
 #import cv2
-import mediapipe as mp
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
+#import mediapipe as mp
+#from mediapipe.tasks import python
+#from mediapipe.tasks.python import vision
 import numpy as np
 import torch
 from pathlib import Path
