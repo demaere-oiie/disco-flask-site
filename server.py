@@ -88,7 +88,7 @@ def classify_rpsd(image_path):
     if l.x > xx: xx=l.x
     if l.y > xy: xy=l.y
 
-  sm, sx = (.8,1.2)
+  sm, sx = (0.9,1.1)
   mx = max(int(mx*sm*image.width),0)
   my = max(int(my*sm*image.height),0)
   xx = min(int(xx*sx*image.width),image.width)
@@ -188,6 +188,12 @@ def upload_rps_file():
     </form>
     '''
 
+serial = 0
+def bump():
+    global serial
+    serial = serial + 1
+    return serial
+
 @app.route('/rpsd', methods=['GET', 'POST'])
 def upload_rpsd_file():
     if request.method == 'POST':
@@ -202,7 +208,7 @@ def upload_rpsd_file():
             flash('No selected file')
             return redirect(request.url)
         file.save("/tmp/foo")
-        return "<pre>"+classify_rpsd("/tmp/foo")+"</pre><img src='/uploads/foo'><img src='/uploads/crop.png'>"
+        return "<pre>"+classify_rpsd("/tmp/foo")+f"</pre><img src='/uploads/foo?{bump()}'><img src='/uploads/crop.png?{serial}'>"
     return '''
     <!doctype html>
     <title>Upload new RPSD</title>
