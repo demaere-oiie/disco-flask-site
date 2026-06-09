@@ -1,3 +1,15 @@
+function playround(play, tostr) {
+    const plays = ["R","P","S"];
+    const mach = plays[Math.floor(Math.random() * plays.length)];
+    if(play == mach) { winner = "No"; }
+    else if((play == "R" && mach == "S") ||
+            (play == "P" && mach == "R") ||
+            (play == "S" && mach == "P")) { winner = "You"; }
+    else { winner = "I"; }
+    return ("\nI play " + tostr[mach] +
+            "\n" + winner + " win...")
+}
+
 async function main() {
     navigator = window.navigator;
 
@@ -61,7 +73,11 @@ async function main() {
         "D": "???",
         };
 
-        pre.innerHTML = foo;
+        pre.innerHTML = tostr[foo[5]];
+        pre.innerHTML += foo.slice(6,foo.indexOf('@'));
+        if (foo[5] != "D") {
+            pre.innerHTML += playround(foo[5],tostr);
+        }
         console.log(foo);
         }, 4000);
     });

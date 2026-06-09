@@ -70,15 +70,23 @@ def classify_oon(image_path):
     s += "</pre>"
     return s
 
+# https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker
 def classify_geom(lm):
-    palm = (lm[9].x - lm[0].x, lm[9].y - lm[0].y)
-    indx = (lm[8].x - lm[6].x, lm[8].y - lm[6].y)
-    ring = (lm[16].x - lm[14].x, lm[16].y - lm[14].y)
+    palm = (lm[9].x - lm[0].x, lm[9].y - lm[0].y) #, lm[9].z - lm[0].z)
+    indx = (lm[8].x - lm[6].x, lm[8].y - lm[6].y) #, lm[8].z - lm[6].z)
+    ring = (lm[16].x-lm[14].x, lm[16].y-lm[14].y) #, lm[16].z-lm[14].z)
 
-    dpi = palm[0]*indx[0] + palm[1]*indx[1]
-    dpr = palm[0]*ring[0] + palm[1]*ring[1]
+    dpi = palm[0]*indx[0] + palm[1]*indx[1] # + palm[2]*indx[2]
+    dpr = palm[0]*ring[0] + palm[1]*ring[1] # + palm[2]+ring[2]
 
-    return f" {dpi<0} {dpr<0}"
+    spi, spr = (dpi<0, dpr<0)
+
+    if (spi,spr) == (True,True): cl="R"
+    elif (spi,spr) == (False,False): cl="P"
+    elif (spi,spr) == (False,True): cl="S"
+    else: cl="D"
+
+    return f"{cl} {spi} {spr} @ "
 
 def classify_rpsd(image_path):
   # STEP 3: Load the input image.
@@ -89,30 +97,8 @@ def classify_rpsd(image_path):
 
   if not detection_result.hand_landmarks:
     return classify_rpsd2(image_path)
-
-  mx,my = 1,1
-  xx,xy = 0,0
-  for l in detection_result.hand_landmarks[0]:
-    if l.x < mx: mx=l.x
-    if l.y < my: my=l.y
-    if l.x > xx: xx=l.x
-    if l.y > xy: xy=l.y
-
-  sm, sx = (0.9,1.1)
-  mx = max(int(mx*sm*image.width),0)
-  my = max(int(my*sm*image.height),0)
-  xx = min(int(xx*sx*image.width),image.width)
-  xy = min(int(xy*sx*image.height),image.height)
-
-  if (image.width/(xx-mx))>2 or  (image.height/(xy-my))>2:
-
-      image = cv2.imread(image_path)
-      cropped = image[my:xy, mx:xx]
-      cv2.imwrite('/tmp/crop.png',cropped)
-      return classify_rpsd2('/tmp/crop.png')+classify_geom(detection_result.hand_landmarks[0])
-
   else:
-      return classify_rpsd2(image_path)+classify_geom(detection_result.hand_landmarks[0])
+    return classify_geom(detection_result.hand_landmarks[0])
 
 def classify_rpsd2(image_path):
     image = Image.open(image_path)
