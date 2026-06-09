@@ -11,6 +11,6 @@ ADD . /code
 ADD test.htm /tmp/test.htm
 ADD test.js /tmp/test.js
 
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 CMD ["python", "server.py"]

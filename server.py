@@ -70,6 +70,16 @@ def classify_oon(image_path):
     s += "</pre>"
     return s
 
+def classify_geom(lm):
+    palm = (lm[9].x - lm[0].x, lm[9].y - lm[0].y)
+    indx = (lm[8].x - lm[6].x, lm[8].y - lm[6].y)
+    ring = (lm[16].x - lm[14].x, lm[16].y - lm[14].y)
+
+    dpi = palm[0]*indx[0] + palm[1]*indx[1]
+    dpr = palm[0]*ring[0] + palm[1]*ring[1]
+
+    return f" {dpi<0} {dpr<0}"
+
 def classify_rpsd(image_path):
   # STEP 3: Load the input image.
   image = mp.Image.create_from_file(str(image_path))
@@ -99,10 +109,10 @@ def classify_rpsd(image_path):
       image = cv2.imread(image_path)
       cropped = image[my:xy, mx:xx]
       cv2.imwrite('/tmp/crop.png',cropped)
-      return classify_rpsd2('/tmp/crop.png')
+      return classify_rpsd2('/tmp/crop.png')+classify_geom(detection_result.hand_landmarks[0])
 
   else:
-      return classify_rpsd2(image_path)
+      return classify_rpsd2(image_path)+classify_geom(detection_result.hand_landmarks[0])
 
 def classify_rpsd2(image_path):
     image = Image.open(image_path)
