@@ -8,14 +8,30 @@ const tostr = {
         "D": "???",
 };
 
+const beats = { "R": "P", "P": "S", "S": "R", };
+
+var last = "";
+
+var memory = {};
+
+
 function playround(play) {
     const plays = ["R","P","S"];
-    const mach = plays[Math.floor(Math.random() * plays.length)];
+    var mach = "";
+    if (last in memory) {
+        mach = memory[last];
+    } else {
+        mach = plays[Math.floor(Math.random() * plays.length)];
+    }
     if(play == mach) { winner = "No"; }
     else if((play == "R" && mach == "S") ||
             (play == "P" && mach == "R") ||
             (play == "S" && mach == "P")) { winner = "You"; pwin += 1; } 
     else { winner = "I"; mwin += 1; }
+    if (last.length == 2) {
+        memory[last] = beats[play];
+    }
+    last = play+mach;
     return ("\nI play " + tostr[mach] +
             "\n" + winner + " win..." +
             "\n" + pwin + ":" + mwin)
