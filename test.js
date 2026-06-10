@@ -1,7 +1,14 @@
 var mwin = 0;
 var pwin = 0;
 
-function playround(play, tostr) {
+const tostr = {
+        "R": "Rock",
+        "P": "Paper",
+        "S": "Scissors",
+        "D": "???",
+};
+
+function playround(play) {
     const plays = ["R","P","S"];
     const mach = plays[Math.floor(Math.random() * plays.length)];
     if(play == mach) { winner = "No"; }
@@ -70,20 +77,25 @@ async function main() {
         });
         const foo = await response.text();
 
-        tostr = {
-        "R": "Rock",
-        "P": "Paper",
-        "S": "Scissors",
-        "D": "???",
-        };
-
         pre.innerHTML = tostr[foo[5]];
         pre.innerHTML += foo.slice(6,foo.indexOf('@'));
         if (foo[5] != "D") {
-            pre.innerHTML += playround(foo[5],tostr);
+            pre.innerHTML += playround(foo[5]);
         }
         console.log(foo);
         }, 2000);
+    });
+    document.addEventListener('keydown', (event) => {
+        if(event.key == "r") {
+            const pre = document.querySelector('pre');
+            pre.innerHTML = playround("R");
+        } else if(event.key == "p") {
+            const pre = document.querySelector('pre');
+            pre.innerHTML = playround("P");
+        } else if(event.key == "s") {
+            const pre = document.querySelector('pre');
+            pre.innerHTML = playround("S");
+        }
     });
 }
 
