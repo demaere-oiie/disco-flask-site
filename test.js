@@ -1,13 +1,17 @@
+var mwin = 0;
+var pwin = 0;
+
 function playround(play, tostr) {
     const plays = ["R","P","S"];
     const mach = plays[Math.floor(Math.random() * plays.length)];
     if(play == mach) { winner = "No"; }
     else if((play == "R" && mach == "S") ||
             (play == "P" && mach == "R") ||
-            (play == "S" && mach == "P")) { winner = "You"; }
-    else { winner = "I"; }
+            (play == "S" && mach == "P")) { winner = "You"; pwin += 1; } 
+    else { winner = "I"; mwin += 1; }
     return ("\nI play " + tostr[mach] +
-            "\n" + winner + " win...")
+            "\n" + winner + " win..." +
+            "\n" + pwin + ":" + mwin)
 }
 
 async function main() {
@@ -28,15 +32,15 @@ async function main() {
         setTimeout(() => {
         const pre = document.querySelector('pre');
         pre.innerHTML = "3...";
-        }, 1000);
+        }, 500);
         setTimeout(() => {
         const pre = document.querySelector('pre');
         pre.innerHTML = "2...";
-        }, 2000);
+        }, 1000);
         setTimeout(() => {
         const pre = document.querySelector('pre');
         pre.innerHTML = "1...";
-        }, 3000);
+        }, 1500);
         setTimeout(async () => {
         const pre = document.querySelector('pre');
         pre.innerHTML = "shoot";
@@ -79,7 +83,7 @@ async function main() {
             pre.innerHTML += playround(foo[5],tostr);
         }
         console.log(foo);
-        }, 4000);
+        }, 2000);
     });
 }
 
