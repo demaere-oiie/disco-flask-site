@@ -19,7 +19,7 @@ function playround(play) {
     const plays = ["R","P","S"];
     var mach = "";
     if (last in memory) {
-        mach = memory[last];
+        mach = beats[memory[last]];
     } else {
         mach = plays[Math.floor(Math.random() * plays.length)];
     }
@@ -29,7 +29,7 @@ function playround(play) {
             (play == "S" && mach == "P")) { winner = "You"; pwin += 1; } 
     else { winner = "I"; mwin += 1; }
     if (last.length == 2) {
-        memory[last] = beats[play];
+        memory[last] = play;
     }
     last = play+mach;
     return ("\nI play " + tostr[mach] +
