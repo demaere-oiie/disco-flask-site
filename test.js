@@ -104,13 +104,13 @@ async function main() {
     document.addEventListener('keydown', (event) => {
         if(event.key == "r") {
             const pre = document.querySelector('pre');
-            pre.innerHTML = playround("R");
+            pre.innerHTML = tostr["R"]+playround("R");
         } else if(event.key == "p") {
             const pre = document.querySelector('pre');
-            pre.innerHTML = playround("P");
+            pre.innerHTML = tostr["P"]+playround("P");
         } else if(event.key == "s") {
             const pre = document.querySelector('pre');
-            pre.innerHTML = playround("S");
+            pre.innerHTML = tostr["S"]+playround("S");
         }
     });
 }
