@@ -94,7 +94,6 @@ async function main() {
         const foo = await response.text();
 
         pre.innerHTML = tostr[foo[5]];
-        pre.innerHTML += foo.slice(6,foo.indexOf('@'));
         if (foo[5] != "D") {
             pre.innerHTML += playround(foo[5]);
         }
